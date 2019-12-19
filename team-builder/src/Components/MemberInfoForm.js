@@ -1,6 +1,6 @@
 import React from 'react';
 
-function NewMemberForm(props) {
+function MemberInfoForm(props) {
     const [newTeamMember, setNewTeamMember] = React.useState({
         name: "",
         email: "",
@@ -9,12 +9,24 @@ function NewMemberForm(props) {
     
     const handleSubmit = (event) => {
         event.preventDefault()
+
+        if (props.editing) {
+            props.setTeamMembers(props.teamMembers.map(member => {
+                return (member.name === props.editMember.name) 
+                    ? newTeamMember
+                    : member
+            }))
+            props.setEditing(false)
+
+        } else {
         props.setTeamMembers([...props.teamMembers, newTeamMember])
+        }
         setNewTeamMember({
             name: "",
             email: "",
             role: ""
         })
+    
     }
     
     const handleChange = (event) => {
@@ -54,8 +66,8 @@ function NewMemberForm(props) {
         />
         </div>
 
-        <button role="submit">Add New Member</button>
+        {props.editing ? <button role="submit">Edit Member Information</button> : <button role="submit">Add New Member</button>}
         </form>
         )}
 
-export default NewMemberForm
+export default MemberInfoForm;
